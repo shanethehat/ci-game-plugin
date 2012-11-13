@@ -30,7 +30,7 @@ public class GamePublisherTest {
         List<Action> actions = mock(List.class);
         when(build.getActions()).thenReturn(actions);
 
-        assertThat(new GamePublisher().perform(build, new RuleBook(), true, null), is(false));
+        assertThat(new GamePublisher().perform(build, new RuleBook(), true, null, ""), is(false));
         
         verify(build).getActions();
         verify(actions).add(isA(ScoreCardAction.class));
@@ -45,7 +45,7 @@ public class GamePublisherTest {
         UserScoreProperty userScoreProperty = new UserScoreProperty(10, true);
         mockChangeSetInBuild(build, createUser(userScoreProperty));
 
-        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
+        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null, ""), is(true));
         assertThat(userScoreProperty.getScore(), is(15d));
     }
 
@@ -55,7 +55,7 @@ public class GamePublisherTest {
         User userWithoutProperty = createUser(null);        
         mockChangeSetInBuild(build, userWithoutProperty);
 
-        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
+        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null, ""), is(true));
         verify(userWithoutProperty).addProperty(new UserScoreProperty(5, true));
     }
 
@@ -67,7 +67,7 @@ public class GamePublisherTest {
         User user = createUser(property);        
         mockChangeSetInBuild(build, user, user);
 
-        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null), is(true));
+        assertThat(new GamePublisher().perform(build, createRuleBook(5d), true, null, ""), is(true));
         assertThat(property.getScore(), is(15d));
     }
     
@@ -78,7 +78,7 @@ public class GamePublisherTest {
         UserScoreProperty propertyTwo = new UserScoreProperty(20, true);
         mockChangeSetInBuild(build, createUser(propertyOne, "name"), createUser(propertyTwo, "NAME"));
 
-        assertThat(new GamePublisher().perform(build, createRuleBook(5d), false, null), is(true));
+        assertThat(new GamePublisher().perform(build, createRuleBook(5d), false, null, ""), is(true));
         assertThat(propertyOne.getScore(), is(15d));
         assertThat("Points were added to both users", propertyTwo.getScore(), is(20d));
     }

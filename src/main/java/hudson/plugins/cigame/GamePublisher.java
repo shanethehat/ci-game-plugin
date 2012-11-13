@@ -20,8 +20,11 @@ import hudson.scm.ChangeLogSet;
 import hudson.scm.ChangeLogSet.Entry;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
+import org.kohsuke.stapler.DataBoundConstructor;
 
 public class GamePublisher extends Notifier {
+    
+    
 
     @Override
     public GameDescriptor getDescriptor() {
@@ -37,12 +40,14 @@ public class GamePublisher extends Notifier {
     public Action getProjectAction(AbstractProject<?, ?> project) {
         return null;
     }
+    
+    
 
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher,
             BuildListener listener) throws InterruptedException, IOException {
 
-        perform(build, getDescriptor().getRuleBook(), getDescriptor().getNamesAreCaseSensitive(), listener);
+        perform(build, getDescriptor().getRuleBook(), getDescriptor().getNamesAreCaseSensitive(), listener, getDescriptor().getTestField());
         return true;
     }
 
@@ -55,7 +60,10 @@ public class GamePublisher extends Notifier {
      * @return true, if any user scores were updated; false, otherwise
      * @throws IOException thrown if there was a problem setting a user property
      */
-    boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCasesensitive, BuildListener listener) throws IOException {
+    boolean perform(AbstractBuild<?, ?> build, RuleBook ruleBook, boolean usernameIsCasesensitive, BuildListener listener, String testField) throws IOException {
+        if (null != listener) {
+            listener.getLogger().println("Test field: " + testField);
+        }
         ScoreCard sc = new ScoreCard();
         sc.record(build, ruleBook, listener);
 

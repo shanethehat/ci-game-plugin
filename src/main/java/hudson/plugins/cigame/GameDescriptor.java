@@ -77,6 +77,17 @@ public class GameDescriptor extends BuildStepDescriptor<Publisher> {
         save();
         return true;
     }
+    
+    /** Test input field **/
+    private String testField = "initial";
+    
+    public String getTestField() {
+        return testField;
+    }
+    
+    public void setTestField(String testField) {
+        this.testField = testField;
+    }
 
     public boolean getNamesAreCaseSensitive() {
         return namesAreCaseSensitive;
